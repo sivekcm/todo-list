@@ -1,23 +1,68 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from 'react';
+import Header from './components/Header.js';
+import Btn from './components/Btn.js';
+import Lists from './components/Lists.js';
+import CreateList from './components/CreateList.js';
+import List from './components/List.js';
+import Items from './components/Items.js';
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { useParams } from "react-router-dom";
+import ListContainer from './components/ListContainer.js';
+
 
 function App() {
+  const [showCreateList, setShowCreateList] = useState(false)
+  const [list, setList] = useState([])
+  useEffect(() => {
+    const getLists = async () => {
+      const listsFromServer = await fetchLists()
+      console.log(listsFromServer)
+      console.log(JSON.parse(listsFromServer.body))
+      setList(JSON.parse(listsFromServer.body))
+    }
+
+    getLists()
+  }, [])
+
+  const fetchLists = async () => {
+    const res = await fetch("https://trr97bv1x0.execute-api.us-east-1.amazonaws.com/Prod/list", {method: 'GET', mode: 'cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json'}})
+    const data = await res.json()
+    //console.log(data)
+    return data
+  }
+
+  const deleteListFunc = async (ListID) => {
+    setList(list.filter((list) => list.ListID !== ListID ))
+    alert("Are you sure you want to delete?")
+    await fetch("https://trr97bv1x0.execute-api.us-east-1.amazonaws.com/Prod/list/" + ListID, {method: 'DELETE', mode: 'cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json'}})
+   
+  }
+
+  const createList = async (list) => {
+    await fetch("https://trr97bv1x0.execute-api.us-east-1.amazonaws.com/Prod/list/", {method: 'POST', mode: 'cors', cache: 'no-cache', body: JSON.stringify(list), headers: { 'Content-Type': 'application/json'}})
+    const newLists = await fetchLists()
+    setList(JSON.parse(newLists.body))
+    setShowCreateList(false)
+  }
+
+  const updateList = async (newList) => {
+    await fetch("https://trr97bv1x0.execute-api.us-east-1.amazonaws.com/Prod/list/", {method: 'PUT', mode: 'cors', cache: 'no-cache', body: JSON.stringify(newList), headers: { 'Content-Type': 'application/json'}})
+  }
+
+  //fetch("https://trr97bv1x0.execute-api.us-east-1.amazonaws.com/Prod/list", {method: 'GET', mode: 'no-cors', cache: 'no-cache', headers: {'Access-Control-Allow-Origin':'*','Content-Type': 'application/json'}}).then(response => response.json()).then(data => console.log(data));
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Router>
+        <Route path='/' exact render={(props) => (
+          <>
+            <Header title='Todo Lists'></Header>
+            <Lists lists={list} onUpdate={updateList} onDelete={deleteListFunc}></Lists>
+            <Btn showCreate={showCreateList} onCreateListClick={() => setShowCreateList(!showCreateList) }></Btn>
+            {showCreateList && <CreateList onCreate={createList}/>}
+          </>
+        )} />     
+        <Route path="/list/:id" component={ListContainer}/>
+      </Router>
     </div>
   );
 }

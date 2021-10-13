@@ -11,3 +11,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.completed {
+  text-decoration: line-through 2px red;
+}
+
+.priority {
+  color: gold;
+}
+
+.h2 {
+  vertical-align:middle;
+  color: aqua;
+}
