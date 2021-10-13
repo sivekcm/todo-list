@@ -1,6 +1,6 @@
 import { useState } from "react"
 const CreateItem = ({ListID, onCreateItem}) => {
-    const [item, setItem] = useState('')
+    const [item, setItem] = useState('') //the message of the new item being created
 
     const onSubmit = async (e) => {
         e.preventDefault()
@@ -14,7 +14,7 @@ const CreateItem = ({ListID, onCreateItem}) => {
         const IsCompleted = false
         const Message = item
 
-        await onCreateItem({ListID,Message,IsCompleted,IsHighPriority})
+        await onCreateItem({ListID,Message,IsCompleted,IsHighPriority}) //creates the item
         setItem('')
 
     }

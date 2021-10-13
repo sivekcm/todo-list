@@ -11,8 +11,9 @@ import ListContainer from './components/ListContainer.js';
 
 
 function App() {
-  const [showCreateList, setShowCreateList] = useState(false)
-  const [list, setList] = useState([])
+  const [showCreateList, setShowCreateList] = useState(false) //for showing the create list form
+  const [list, setList] = useState([]) //for rendering the lists
+  //gets the initial list from server on component mount
   useEffect(() => {
     const getLists = async () => {
       const listsFromServer = await fetchLists()
@@ -24,6 +25,7 @@ function App() {
     getLists()
   }, [])
 
+  //fetches lists from server
   const fetchLists = async () => {
     const res = await fetch("https://trr97bv1x0.execute-api.us-east-1.amazonaws.com/Prod/list", {method: 'GET', mode: 'cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json'}})
     const data = await res.json()
@@ -31,6 +33,7 @@ function App() {
     return data
   }
 
+  //delets a list from the server
   const deleteListFunc = async (ListID) => {
     setList(list.filter((list) => list.ListID !== ListID ))
     alert("Are you sure you want to delete?")
@@ -38,6 +41,7 @@ function App() {
    
   }
 
+  //creates a list on the server
   const createList = async (list) => {
     await fetch("https://trr97bv1x0.execute-api.us-east-1.amazonaws.com/Prod/list/", {method: 'POST', mode: 'cors', cache: 'no-cache', body: JSON.stringify(list), headers: { 'Content-Type': 'application/json'}})
     const newLists = await fetchLists()
@@ -45,11 +49,11 @@ function App() {
     setShowCreateList(false)
   }
 
+  //updates list on the server
   const updateList = async (newList) => {
     await fetch("https://trr97bv1x0.execute-api.us-east-1.amazonaws.com/Prod/list/", {method: 'PUT', mode: 'cors', cache: 'no-cache', body: JSON.stringify(newList), headers: { 'Content-Type': 'application/json'}})
   }
 
-  //fetch("https://trr97bv1x0.execute-api.us-east-1.amazonaws.com/Prod/list", {method: 'GET', mode: 'no-cors', cache: 'no-cache', headers: {'Access-Control-Allow-Origin':'*','Content-Type': 'application/json'}}).then(response => response.json()).then(data => console.log(data));
   return (
     <div className="App">
       <Router>

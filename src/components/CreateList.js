@@ -15,7 +15,7 @@ const CreateList = ({onCreate}) => {
         var Date = (date.getMonth()+1)+'/'+date.getDate()+'/'+date.getFullYear();
 
         const Title = name
-        await onCreate({Title, Date })
+        await onCreate({Title, Date }) //creates the lst
         setName('')
 
 

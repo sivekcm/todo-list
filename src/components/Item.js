@@ -1,7 +1,7 @@
 import { BsTrashFill, BsTypeStrikethrough } from "react-icons/bs"
 import { useState } from "react"
 const Item = ({item, toggleCompleted, togglePriority, onDelete}) => {
-const [check, setCheck] = useState(false)
+const [check, setCheck] = useState(false) //for the state of the checkbox
     return (
         <div>
             <h1 className={item.IsCompleted ? 'completed' : ''} onDoubleClick={async () => toggleCompleted(item.ItemID) }>{item.Message}
