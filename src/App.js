@@ -61,8 +61,10 @@ function App() {
           <>
             <Header title='Todo Lists'></Header>
             <Lists lists={list} onUpdate={updateList} onDelete={deleteListFunc}></Lists>
-            <Btn showCreate={showCreateList} onCreateListClick={() => setShowCreateList(!showCreateList) }></Btn>
-            {showCreateList && <CreateList onCreate={createList}/>}
+    
+                {showCreateList && <CreateList onCreate={createList}/>}
+              <Btn showCreate={showCreateList} onCreateListClick={() => setShowCreateList(!showCreateList) }></Btn>
+  
           </>
         )} />     
         <Route path="/list/:id" component={ListContainer}/>

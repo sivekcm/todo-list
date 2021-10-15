@@ -1,4 +1,6 @@
 import { useState } from "react"
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 const CreateList = ({onCreate}) => {
     const [name, setName] = useState('')
@@ -21,12 +23,12 @@ const CreateList = ({onCreate}) => {
 
     }
     return (
-        <form onSubmit={onSubmit}>   
-            <div>
+        <form className='form' onSubmit={onSubmit}>   
+          
                 <label htmlFor="">Name</label>
                 <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-            </div>
-            <input type="submit" value="Save" name="" id="" />     
+                <input style={{backgroundColor:'black', color:'white'}} className='btn' type="submit" value="Save" name="" id="" />     
+            
         </form>
     )
 }

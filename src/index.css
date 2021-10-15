@@ -24,3 +24,17 @@ code {
   vertical-align:middle;
   color: aqua;
 }
+
+.title {
+  margin-right: 40%
+}
+
+form {
+  display: inline-block;
+  margin-left: 30%;
+}
+
+.form * {
+  margin-inline: 5px;
+}
+

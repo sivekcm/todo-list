@@ -7,7 +7,7 @@ const [check, setCheck] = useState(false) //for the state of the checkbox
             <h1 className={item.IsCompleted ? 'completed' : ''} onDoubleClick={async () => toggleCompleted(item.ItemID) }>{item.Message}
                 <label htmlFor="isHighPriority">High Priority?  </label>
                 <input type="checkbox" onClick={async () => togglePriority(item.ItemID)} value={item.IsHighPriority} onChange={(e) => setCheck(e.currentTarget.checked)} name="isHighPriority" id="isHighPriority" />
-                <BsTrashFill onClick={async () => await onDelete(item)}/>
+                <BsTrashFill style={{marginInline:'100px'}} onClick={async () => await onDelete(item)}/>
             </h1>
         </div>
     )
