@@ -19,11 +19,11 @@ const CreateItem = ({ListID, onCreateItem}) => {
 
     }
     return (
-        <form onSubmit={onSubmit}>
-            <div>
+        <form className='form' onSubmit={onSubmit}>
+   
                 <input type="text" placeholder='Add new task to do' value={item} onChange={(e) => setItem(e.target.value)} />
-            </div>
-            <input type="submit" value="Save" />
+        
+            <input style={{backgroundColor:'black', color:'white'}} className='btn' type="submit" value="Save" />
         </form>
     )
 }

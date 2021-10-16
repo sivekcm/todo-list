@@ -48,13 +48,14 @@ const ListContainer = () => {
         
     }
 
+    
+
     //handles when the "high priority" checkbox is checked
     const togglePriority = async (id) => {
         setItems(items.map((item) => 
             item.ItemID === id ? { ...item, IsHighPriority: !item.IsHighPriority } : item
         ))
         setQuery(id)
-        
     }
 
     //updates item on server
@@ -67,6 +68,7 @@ const ListContainer = () => {
     const fetchItems = async () => {
         const res = await fetch("https://trr97bv1x0.execute-api.us-east-1.amazonaws.com/Prod/list/" + id + "/item", {method: 'GET', mode: 'cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json'}})
         const data = await res.json()
+        setItems(items.sort((a,b) => a.isHighPriority - b.isHighPriority))
         return data
     }
 
