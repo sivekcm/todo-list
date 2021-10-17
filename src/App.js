@@ -9,7 +9,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom'
 import { useParams } from "react-router-dom";
 import ListContainer from './components/ListContainer.js';
 
-
+const server = "https://trr97bv1x0.execute-api.us-east-1.amazonaws.com/Prod/list/"
 
 function App() {
   const [showCreateList, setShowCreateList] = useState(false) //for showing the create list form
@@ -18,8 +18,6 @@ function App() {
   useEffect(() => {
     const getLists = async () => {
       const listsFromServer = await fetchLists()
-      console.log(listsFromServer)
-      console.log(JSON.parse(listsFromServer))
       setList(JSON.parse(listsFromServer))
     }
 
@@ -28,23 +26,21 @@ function App() {
 
   //fetches lists from server
   const fetchLists = async () => {
-    const res = await fetch("https://trr97bv1x0.execute-api.us-east-1.amazonaws.com/Prod/list", {method: 'GET', mode: 'cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json'}})
+    const res = await fetch(server, {method: 'GET', mode: 'cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json'}})
     const data = await res.json()
-    //console.log(data)
     return data
   }
 
   //delets a list from the server
   const deleteListFunc = async (ListID) => {
     setList(list.filter((list) => list.ListID !== ListID ))
-    await fetch("https://trr97bv1x0.execute-api.us-east-1.amazonaws.com/Prod/list/" + ListID, {method: 'DELETE', mode: 'cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json'}})
+    await fetch(server + ListID, {method: 'DELETE', mode: 'cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json'}})
    
   }
 
   //creates a list on the server
   const createList = async (list) => {
-    console.log(JSON.stringify(list));
-    await fetch("https://trr97bv1x0.execute-api.us-east-1.amazonaws.com/Prod/list/", {method: 'POST', mode: 'cors', cache: 'no-cache', body: JSON.stringify(list), headers: { 'Content-Type': 'application/json'}})
+    await fetch(server, {method: 'POST', mode: 'cors', cache: 'no-cache', body: JSON.stringify(list), headers: { 'Content-Type': 'application/json'}})
     const newLists = await fetchLists()
     setList(JSON.parse(newLists))
     setShowCreateList(false)
@@ -52,7 +48,7 @@ function App() {
 
   //updates list on the server
   const updateList = async (newList) => {
-    await fetch("https://trr97bv1x0.execute-api.us-east-1.amazonaws.com/Prod/list/", {method: 'PUT', mode: 'cors', cache: 'no-cache', body: JSON.stringify(newList), headers: { 'Content-Type': 'application/json'}})
+    await fetch(server, {method: 'PUT', mode: 'cors', cache: 'no-cache', body: JSON.stringify(newList), headers: { 'Content-Type': 'application/json'}})
   }
 
   return (
@@ -62,12 +58,10 @@ function App() {
           <>
             <Header title='Todo Lists'></Header>
             <Lists lists={list} onUpdate={updateList} onDelete={deleteListFunc}></Lists>
-    
-                {showCreateList && <CreateList onCreate={createList}/>}
-              <Btn showCreate={showCreateList} onCreateListClick={() => setShowCreateList(!showCreateList) }></Btn>
-  
+            {showCreateList && <CreateList onCreate={createList}/>}
+            <Btn showCreate={showCreateList} onCreateListClick={() => setShowCreateList(!showCreateList) }></Btn>
           </>
-        )} />     
+        )}/>     
         <Route path="/list/:id" component={ListContainer}/>
       </Router>
     </div>

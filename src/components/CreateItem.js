@@ -5,8 +5,9 @@ const CreateItem = ({ListID, onCreateItem}) => {
     const onSubmit = async (e) => {
         e.preventDefault()
 
+        //if nothing was entered
         if (!item) {
-            alert("please enter a description for the task to do")
+            alert("please enter a description for the task todo")
             return
         }
 
@@ -20,9 +21,7 @@ const CreateItem = ({ListID, onCreateItem}) => {
     }
     return (
         <form className='form' onSubmit={onSubmit}>
-   
-                <input type="text" placeholder='Add new task to do' value={item} onChange={(e) => setItem(e.target.value)} />
-        
+            <input type="text" placeholder='Add new task to do' value={item} onChange={(e) => setItem(e.target.value)} />
             <input style={{backgroundColor:'black', color:'white'}} className='btn' type="submit" value="Save" />
         </form>
     )

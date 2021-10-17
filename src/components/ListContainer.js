@@ -4,6 +4,9 @@ import Btn from './Btn';
 import CreateItem from './CreateItem';
 import Header from './Header';
 import Items from './Items';
+
+const server = "https://trr97bv1x0.execute-api.us-east-1.amazonaws.com/Prod/list/"
+
 const ListContainer = () => {
     const { id } = useParams() //the listID path parameter
     const [items, setItems] = useState([]) //the items in the todo list
@@ -22,8 +25,7 @@ const ListContainer = () => {
       //For updating the item when the state changes
       useEffect(() => {
         const putItems = async () => {
-            console.log(items)
-            const res = items.find(item => item.ItemID === query
+            const res = items.find(item => item.ItemID === query //query is the item-id
             )
             await updateItem(res)
         }
@@ -32,14 +34,6 @@ const ListContainer = () => {
 
     //handles when an item is marked as completes
     const toggleCompleted = async (id) => {
-        //https://stackoverflow.com/questions/880512/prevent-text-selection-after-double-click  
-        //disables text highlighting on double click
-            if(document.selection && document.selection.empty) {
-                document.selection.empty();
-            } else if(window.getSelection) {
-                var sel = window.getSelection();
-                sel.removeAllRanges();
-            }
         //updates the IsCompleted property of the item    
         setItems(items.map((item) => 
             item.ItemID === id ? { ...item, IsCompleted: {"data": [!item.IsCompleted.data[0]]} } : item
@@ -48,9 +42,7 @@ const ListContainer = () => {
         
     }
 
-    
-
-    //handles when the "high priority" checkbox is checked
+    //handles when the "priority" checkbox is checked
     const togglePriority = async (id) => {
         setItems(items.map((item) => 
             item.ItemID === id ? { ...item, IsHighPriority: {"data": [!item.IsHighPriority.data[0]]} } : item
@@ -60,29 +52,25 @@ const ListContainer = () => {
 
     //updates item on server
     const updateItem = async (item) => {
-        console.log(JSON.stringify(item))
-        const res = await fetch("https://trr97bv1x0.execute-api.us-east-1.amazonaws.com/Prod/list/" + id + "/item", {method: 'PUT', body:JSON.stringify(item), mode: 'cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json'}})
+        const res = await fetch(server + id + "/item", {method: 'PUT', body:JSON.stringify(item), mode: 'cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json'}})
     }
     
     //fetches items from server
     const fetchItems = async () => {
-        const res = await fetch("https://trr97bv1x0.execute-api.us-east-1.amazonaws.com/Prod/list/" + id + "/item", {method: 'GET', mode: 'cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json'}})
+        const res = await fetch(server + id + "/item", {method: 'GET', mode: 'cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json'}})
         const data = await res.json()
-        setItems(items.sort((a,b) => a.isHighPriority - b.isHighPriority))
         return data
     }
 
-    //delets an item from the server
+    //deletes an item from the server
     const deleteItem = async (oldItem) => {
-        console.log(oldItem)
         setItems(items.filter((item) => item.ItemID !== oldItem.ItemID))
-        const res = await fetch("https://trr97bv1x0.execute-api.us-east-1.amazonaws.com/Prod/list/" + id + "/item/" + oldItem.ItemID, {method: 'DELETE', mode: 'cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json'}})
+        const res = await fetch(server + id + "/item/" + oldItem.ItemID, {method: 'DELETE', mode: 'cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json'}})
     }
 
     //creates an item on the server
     const createItem = async (newItem) => {
-        console.log(JSON.stringify(newItem))
-        await fetch("https://trr97bv1x0.execute-api.us-east-1.amazonaws.com/Prod/list/" + id + "/item", {method: 'POST', body:JSON.stringify(newItem), mode: 'cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json'}})
+        await fetch(server + id + "/item", {method: 'POST', body:JSON.stringify(newItem), mode: 'cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json'}})
         setShowCreateItem(false)
         const data = await fetchItems()
         setItems(data)
@@ -92,8 +80,7 @@ const ListContainer = () => {
         <div>
             <Items togglePriority={togglePriority} toggleCompleted={toggleCompleted} onDelete={deleteItem} items={items}/>
             <Btn onCreateListClick={() => setShowCreateItem(!showCreateItem)} showCreate={showCreateItem}/>
-            {showCreateItem && <CreateItem ItemID={id} onCreateItem={createItem}/>}
-            
+            {showCreateItem && <CreateItem ItemID={id} onCreateItem={createItem}/>}   
         </div>
     )
 }

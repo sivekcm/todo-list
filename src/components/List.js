@@ -12,19 +12,18 @@ const List = ({ list, onDelete, onUpdate }) => {
     const ListID = list.ListID
     return (
         <>
-        
+            <ListGroupItem className='select-item' style={{backgroundColor:'#e9f5f5'}}>
 
-            <ListGroupItem className='select-item'  style={{backgroundColor:'#e9f5f5'}}>
-            {showUpdate ? <div className='title'><input  value={ Title } onChange={(e) => setTitle(e.target.value)}/></div> 
-            : <Link className='title' style={{textDecoration:'none'}} to={'/list/' + ListID}>{Title}</Link> 
+                {showUpdate ? <div className='title'><input  value={ Title } onChange={(e) => setTitle(e.target.value)}/></div> 
+                            : <Link className='title' style={{textDecoration:'none'}} to={'/list/' + ListID}>{Title}</Link>  }
 
+                <p style={{display:'inline-block', marginRight:''}}>{list.Date.toString().substring(0,10)}</p>
+                <FaTimes className='icon select delete' onClick={ async () => onDelete(list.ListID) }/>
                 
-                 }
-            <p style={{display:'inline-block', marginRight:''}}>{list.Date.toString().substring(0,10)}</p>
-            <FaTimes className='icon select delete' onClick={ async () => onDelete(list.ListID) }/>
-            {showUpdate ? <FcCheckmark className='icon select' onClick={ async () => {setShowUpdate(!showUpdate); onUpdate({ListID, Title, Date } )} }/> : <BsPencilFill className='icon select edit' onClick={ () => setShowUpdate(!showUpdate) }/> }
+                {showUpdate ? <FcCheckmark className='icon select' onClick={ async () => {setShowUpdate(!showUpdate); onUpdate({ListID, Title, Date } )} }/> 
+                            : <BsPencilFill className='icon select edit' onClick={ () => setShowUpdate(!showUpdate) }/> }
+                            
             </ListGroupItem>
-            
         </>
     )
 }
