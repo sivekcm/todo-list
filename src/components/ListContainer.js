@@ -42,7 +42,7 @@ const ListContainer = () => {
             }
         //updates the IsCompleted property of the item    
         setItems(items.map((item) => 
-            item.ItemID === id ? { ...item, IsCompleted: !item.IsCompleted } : item
+            item.ItemID === id ? { ...item, IsCompleted: {"data": [!item.IsCompleted.data[0]]} } : item
         ))
         setQuery(id)
         
@@ -53,14 +53,14 @@ const ListContainer = () => {
     //handles when the "high priority" checkbox is checked
     const togglePriority = async (id) => {
         setItems(items.map((item) => 
-            item.ItemID === id ? { ...item, IsHighPriority: !item.IsHighPriority } : item
+            item.ItemID === id ? { ...item, IsHighPriority: {"data": [!item.IsHighPriority.data[0]]} } : item
         ))
         setQuery(id)
     }
 
     //updates item on server
     const updateItem = async (item) => {
-        console.log(item)
+        console.log(JSON.stringify(item))
         const res = await fetch("https://trr97bv1x0.execute-api.us-east-1.amazonaws.com/Prod/list/" + id + "/item", {method: 'PUT', body:JSON.stringify(item), mode: 'cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json'}})
     }
     
@@ -81,6 +81,7 @@ const ListContainer = () => {
 
     //creates an item on the server
     const createItem = async (newItem) => {
+        console.log(JSON.stringify(newItem))
         await fetch("https://trr97bv1x0.execute-api.us-east-1.amazonaws.com/Prod/list/" + id + "/item", {method: 'POST', body:JSON.stringify(newItem), mode: 'cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json'}})
         setShowCreateItem(false)
         const data = await fetchItems()

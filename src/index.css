@@ -44,6 +44,12 @@ form {
   cursor: pointer;
 }
 
+.select-item:hover {
+  transform: scale(1.02);
+  background-color: red;
+  cursor: pointer;
+}
+
 .header {
   margin-top: 10%;
   margin-left: 45%;

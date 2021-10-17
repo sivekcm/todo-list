@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 import ListContainer from './components/ListContainer.js';
 
 
+
 function App() {
   const [showCreateList, setShowCreateList] = useState(false) //for showing the create list form
   const [list, setList] = useState([]) //for rendering the lists
@@ -18,8 +19,8 @@ function App() {
     const getLists = async () => {
       const listsFromServer = await fetchLists()
       console.log(listsFromServer)
-      console.log(JSON.parse(listsFromServer.body))
-      setList(JSON.parse(listsFromServer.body))
+      console.log(JSON.parse(listsFromServer))
+      setList(JSON.parse(listsFromServer))
     }
 
     getLists()
@@ -36,16 +37,16 @@ function App() {
   //delets a list from the server
   const deleteListFunc = async (ListID) => {
     setList(list.filter((list) => list.ListID !== ListID ))
-    alert("Are you sure you want to delete?")
     await fetch("https://trr97bv1x0.execute-api.us-east-1.amazonaws.com/Prod/list/" + ListID, {method: 'DELETE', mode: 'cors', cache: 'no-cache', headers: { 'Content-Type': 'application/json'}})
    
   }
 
   //creates a list on the server
   const createList = async (list) => {
+    console.log(JSON.stringify(list));
     await fetch("https://trr97bv1x0.execute-api.us-east-1.amazonaws.com/Prod/list/", {method: 'POST', mode: 'cors', cache: 'no-cache', body: JSON.stringify(list), headers: { 'Content-Type': 'application/json'}})
     const newLists = await fetchLists()
-    setList(JSON.parse(newLists.body))
+    setList(JSON.parse(newLists))
     setShowCreateList(false)
   }
 
