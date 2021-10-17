@@ -1,1 +1,1 @@
-front end for simple todo app
+Simple todo app written in React and Node.js.
